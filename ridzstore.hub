@@ -1,0 +1,417 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local vim = game:GetService("VirtualInputManager")
+local localPlayer = Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+
+if CoreGui:FindFirstChild("BetaGui") then
+    CoreGui.BetaGui:Destroy()
+end
+
+local BetaGui = Instance.new("ScreenGui")
+BetaGui.Name = "BetaGui"
+BetaGui.ResetOnSpawn = false
+BetaGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+BetaGui.Parent = CoreGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 220, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -110, 0.4, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Parent = BetaGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 8)
+uiCorner.Parent = mainFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -60, 0, 30)
+titleLabel.Position = UDim2.new(0, 8, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Beta - Bmfb"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 14
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = mainFrame
+
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 25, 0, 25)
+minimizeButton.Position = UDim2.new(1, -56, 0, 3)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.Text = "-"
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.Font = Enum.Font.SourceSansBold
+minimizeButton.TextSize = 16
+minimizeButton.Parent = mainFrame
+
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0, 4)
+minCorner.Parent = minimizeButton
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -28, 0, 3)
+closeButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+closeButton.BorderSizePixel = 0
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.TextSize = 14
+closeButton.Parent = mainFrame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 4)
+closeCorner.Parent = closeButton
+
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(1, 0, 1, -30)
+contentFrame.Position = UDim2.new(0, 0, 0, 30)
+contentFrame.BackgroundTransparency = 1
+contentFrame.Parent = mainFrame
+
+local teleportButton = Instance.new("TextButton")
+teleportButton.Size = UDim2.new(0, 180, 0, 35)
+teleportButton.Position = UDim2.new(0.5, -90, 0, 5)
+teleportButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+teleportButton.BorderSizePixel = 0
+teleportButton.Text = "TP LAST ZONE"
+teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+teleportButton.Font = Enum.Font.SourceSansBold
+teleportButton.TextSize = 14
+teleportButton.Parent = contentFrame
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 6)
+btnCorner.Parent = teleportButton
+
+local x2ClaimButton = Instance.new("TextButton")
+x2ClaimButton.Size = UDim2.new(0, 180, 0, 35)
+x2ClaimButton.Position = UDim2.new(0.5, -90, 0, 48)
+x2ClaimButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+x2ClaimButton.BorderSizePixel = 0
+x2ClaimButton.Text = "X2 CLAIM: OFF"
+x2ClaimButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+x2ClaimButton.Font = Enum.Font.SourceSansBold
+x2ClaimButton.TextSize = 14
+x2ClaimButton.Parent = contentFrame
+
+local x2Corner = Instance.new("UICorner")
+x2Corner.CornerRadius = UDim.new(0, 6)
+x2Corner.Parent = x2ClaimButton
+
+local collectCashButton = Instance.new("TextButton")
+collectCashButton.Size = UDim2.new(0, 180, 0, 35)
+collectCashButton.Position = UDim2.new(0.5, -90, 0, 91)
+collectCashButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+collectCashButton.BorderSizePixel = 0
+collectCashButton.Text = "Collect Cash: OFF"
+collectCashButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+collectCashButton.Font = Enum.Font.SourceSansBold
+collectCashButton.TextSize = 14
+collectCashButton.Parent = contentFrame
+
+local collectCorner = Instance.new("UICorner")
+collectCorner.CornerRadius = UDim.new(0, 6)
+collectCorner.Parent = collectCashButton
+
+local selectedBase = 1
+local baseSelectButton = Instance.new("TextButton")
+baseSelectButton.Size = UDim2.new(0, 180, 0, 30)
+baseSelectButton.Position = UDim2.new(0.5, -90, 0, 134)
+baseSelectButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+baseSelectButton.BorderSizePixel = 0
+baseSelectButton.Text = "BASE: 1"
+baseSelectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+baseSelectButton.Font = Enum.Font.SourceSansBold
+baseSelectButton.TextSize = 14
+baseSelectButton.Parent = contentFrame
+
+local baseCorner = Instance.new("UICorner")
+baseCorner.CornerRadius = UDim.new(0, 6)
+baseCorner.Parent = baseSelectButton
+
+baseSelectButton.MouseButton1Click:Connect(function()
+    selectedBase = selectedBase % 5 + 1
+    baseSelectButton.Text = "BASE: " .. tostring(selectedBase)
+end)
+
+local offsetXLabel = Instance.new("TextLabel")
+offsetXLabel.Size = UDim2.new(0, 80, 0, 20)
+offsetXLabel.Position = UDim2.new(0, 10, 0, 195)
+offsetXLabel.BackgroundTransparency = 1
+offsetXLabel.Text = "Offset X:"
+offsetXLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+offsetXLabel.Font = Enum.Font.SourceSans
+offsetXLabel.TextSize = 12
+offsetXLabel.TextXAlignment = Enum.TextXAlignment.Left
+offsetXLabel.Parent = contentFrame
+
+local offsetXBox = Instance.new("TextBox")
+offsetXBox.Size = UDim2.new(0, 60, 0, 22)
+offsetXBox.Position = UDim2.new(0, 95, 0, 193)
+offsetXBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+offsetXBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+offsetXBox.BorderSizePixel = 0
+offsetXBox.Font = Enum.Font.SourceSans
+offsetXBox.TextSize = 12
+offsetXBox.Text = "0"
+offsetXBox.Parent = contentFrame
+
+local offsetXCorner = Instance.new("UICorner")
+offsetXCorner.CornerRadius = UDim.new(0, 4)
+offsetXCorner.Parent = offsetXBox
+
+local offsetYLabel = Instance.new("TextLabel")
+offsetYLabel.Size = UDim2.new(0, 80, 0, 20)
+offsetYLabel.Position = UDim2.new(0, 10, 0, 225)
+offsetYLabel.BackgroundTransparency = 1
+offsetYLabel.Text = "Offset Y:"
+offsetYLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+offsetYLabel.Font = Enum.Font.SourceSans
+offsetYLabel.TextSize = 12
+offsetYLabel.TextXAlignment = Enum.TextXAlignment.Left
+offsetYLabel.Parent = contentFrame
+
+local offsetYBox = Instance.new("TextBox")
+offsetYBox.Size = UDim2.new(0, 60, 0, 22)
+offsetYBox.Position = UDim2.new(0, 95, 0, 223)
+offsetYBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+offsetYBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+offsetYBox.BorderSizePixel = 0
+offsetYBox.Font = Enum.Font.SourceSans
+offsetYBox.TextSize = 12
+offsetYBox.Text = "0"
+offsetYBox.Parent = contentFrame
+
+local offsetYCorner = Instance.new("UICorner")
+offsetYCorner.CornerRadius = UDim.new(0, 4)
+offsetYCorner.Parent = offsetYBox
+
+local TELEPORT_POS = Vector3.new(-289.02, 234.19, 14244.04)
+local isX2Active = false
+local x2LoopCoroutine = nil
+local isCollectCashActive = false
+local collectCashCoroutine = nil
+
+local function setAllZIndex(parent, z)
+    if parent:IsA("GuiObject") then
+        parent.ZIndex = z
+    end
+    for _, child in pairs(parent:GetChildren()) do
+        setAllZIndex(child, z)
+    end
+end
+setAllZIndex(mainFrame, 999999999)
+
+local function teleport()
+    local char = localPlayer.Character
+    if char then
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = CFrame.new(TELEPORT_POS)
+            teleportButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+            task.wait(0.15)
+            teleportButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        end
+    end
+end
+teleportButton.MouseButton1Click:Connect(teleport)
+
+local function getOffsetX()
+    return tonumber(offsetXBox.Text) or 0
+end
+local function getOffsetY()
+    return tonumber(offsetYBox.Text) or 0
+end
+
+local function claimX2Once()
+    local gui = localPlayer:FindFirstChild("PlayerGui")
+    if not gui then return end
+    local popUp = gui:FindFirstChild("PopUp")
+    if not popUp then return end
+    local frame2x = popUp:FindFirstChild("2xButton")
+    if not frame2x or not frame2x:IsA("Frame") or not frame2x.Visible then return end
+    local imageLabel = frame2x:FindFirstChild("ImageLabel")
+    if not imageLabel or not imageLabel.Visible then return end
+
+    local done = false
+    pcall(function()
+        if imageLabel.MouseButton1Click then
+            firesignal(imageLabel.MouseButton1Click)
+            done = true
+        end
+    end)
+    if not done then
+        pcall(function()
+            if imageLabel.Activated then
+                firesignal(imageLabel.Activated)
+                done = true
+            end
+        end)
+    end
+    if not done then
+        local cd = imageLabel:FindFirstChildOfClass("ClickDetector")
+        if cd then
+            fireclickdetector(cd)
+            done = true
+        end
+    end
+    if not done then
+        local center = imageLabel.AbsolutePosition + imageLabel.AbsoluteSize / 2
+        local targetX = center.X + getOffsetX()
+        local targetY = center.Y + getOffsetY()
+        vim:SendMouseButtonEvent(targetX, targetY, 0, true, game, 0)
+        task.wait(0.05)
+        vim:SendMouseButtonEvent(targetX, targetY, 0, false, game, 0)
+    end
+end
+
+local function x2Loop()
+    while isX2Active do
+        pcall(claimX2Once)
+        task.wait(0.3)
+    end
+end
+
+local function startX2()
+    isX2Active = true
+    x2LoopCoroutine = task.spawn(x2Loop)
+    x2ClaimButton.Text = "X2 CLAIM: ON"
+    x2ClaimButton.BackgroundColor3 = Color3.fromRGB(35, 150, 35)
+end
+
+local function stopX2()
+    isX2Active = false
+    if x2LoopCoroutine then
+        pcall(task.cancel, x2LoopCoroutine)
+        x2LoopCoroutine = nil
+    end
+    x2ClaimButton.Text = "X2 CLAIM: OFF"
+    x2ClaimButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+end
+
+x2ClaimButton.MouseButton1Click:Connect(function()
+    if not isX2Active then startX2() else stopX2() end
+end)
+
+local function collectAllPodiums()
+    local char = localPlayer.Character
+    if not char then return false end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return false end
+    local base = workspace:FindFirstChild("Base")
+    if not base then return false end
+    local targetBase = base:FindFirstChild("Base" .. selectedBase)
+    if not targetBase then return false end
+    local podiums = targetBase:FindFirstChild("Podiums")
+    if not podiums then return false end
+
+    for i = 1, 50 do
+        if not isCollectCashActive then break end
+        local podium = podiums:FindFirstChild("Podium" .. i)
+        if podium then
+            local cashClaim = podium:FindFirstChild("CashClaim")
+            if cashClaim and cashClaim:IsA("BasePart") then
+                pcall(function()
+                    firetouchinterest(hrp, cashClaim, 0)
+                    task.wait(0.01)
+                    firetouchinterest(hrp, cashClaim, 1)
+                end)
+            end
+        end
+        task.wait(0.02)
+    end
+    return true
+end
+
+local function collectCashLoop()
+    while isCollectCashActive do
+        collectAllPodiums()
+        task.wait(1)
+    end
+end
+
+local function startCollectCash()
+    isCollectCashActive = true
+    collectCashCoroutine = task.spawn(collectCashLoop)
+    collectCashButton.Text = "Collect Cash: ON"
+    collectCashButton.BackgroundColor3 = Color3.fromRGB(35, 150, 35)
+end
+
+local function stopCollectCash()
+    isCollectCashActive = false
+    if collectCashCoroutine then
+        pcall(task.cancel, collectCashCoroutine)
+        collectCashCoroutine = nil
+    end
+    collectCashButton.Text = "Collect Cash: OFF"
+    collectCashButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+end
+
+collectCashButton.MouseButton1Click:Connect(function()
+    if not isCollectCashActive then startCollectCash() else stopCollectCash() end
+end)
+
+local dragging, dragInput, dragStart, startPos
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+mainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+local isMin = false
+minimizeButton.MouseButton1Click:Connect(function()
+    isMin = not isMin
+    if isMin then
+        contentFrame.Visible = false
+        mainFrame.Size = UDim2.new(0, 220, 0, 30)
+        minimizeButton.Text = "+"
+        minimizeButton.BackgroundColor3 = Color3.fromRGB(35, 150, 35)
+    else
+        contentFrame.Visible = true
+        mainFrame.Size = UDim2.new(0, 220, 0, 300)
+        minimizeButton.Text = "-"
+        minimizeButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    stopX2()
+    stopCollectCash()
+    BetaGui:Destroy()
+end)
+
+task.spawn(function()
+    local vu = game:GetService("VirtualUser")
+    Players.LocalPlayer.Idled:Connect(function()
+        vu:CaptureController()
+        vu:ClickButton2(Vector2.new(0, 0))
+    end)
+end)
