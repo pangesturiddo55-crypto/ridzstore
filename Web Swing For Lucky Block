@@ -1,0 +1,25 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TypedRemote = ReplicatedStorage.Utilities.TypedRemote
+
+
+TypedRemote.WebSwingRoll:InvokeServer(99999999999999999999999999)
+
+
+TypedRemote.RequestMutationOrbPlan:InvokeServer()
+TypedRemote.RequestEventOrbPlan:InvokeServer()
+
+
+for i = 1, 10 do
+    TypedRemote.MutationOrbGrabbed:FireServer(i, 1)
+end
+
+
+for i = 1, 10 do
+    TypedRemote.EventOrbGrabbed:FireServer(i, 1)
+end
+
+
+task.wait(2)
+
+
+TypedRemote.WebSwingRollFinish:FireServer()
