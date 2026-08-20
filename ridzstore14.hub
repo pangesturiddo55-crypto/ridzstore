@@ -1,0 +1,32 @@
+-- Skrip contoh untuk "Throw a Coin"
+while true do
+    -- Logika untuk melontarkan koin secara otomatis
+    AutoThrow()
+    
+    -- Logika untuk menjual semua koin
+    SellAll()
+    
+    -- Logika untuk meningkatkan multiplier Luck
+    UpgradeLuck()
+    
+    -- Logika untuk meningkatkan multiplier Value
+    UpgradeValue()
+    
+    wait(0.5) -- Jeda antar iterasi
+end
+
+function AutoThrow()
+    -- Kode untuk melontarkan koin
+end
+
+function SellAll()
+    -- Kode untuk menjual semua koin
+end
+
+function UpgradeLuck()
+    -- Kode untuk meningkatkan multiplier Luck
+end
+
+function UpgradeValue()
+    -- Kode untuk meningkatkan multiplier Value
+end
