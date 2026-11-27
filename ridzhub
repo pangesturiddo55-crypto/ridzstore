@@ -1,0 +1,55 @@
+local Players = game:GetService("Players")
+
+local INTERVAL = 1 -- detik
+local CASH_PER_TICK = 10 -- uang pasif per detik
+
+-- Setiap pemain punya Attribute yang diaktifkan saat beli gamepass
+-- player:SetAttribute("AutoCollect", true)
+-- player:SetAttribute("AutoSell", true)
+-- player:SetAttribute("AutoClaim", true)
+
+local function addCash(player, amount)
+	local stats = player:FindFirstChild("leaderstats")
+	local cash = stats and stats:FindFirstChild("Cash")
+	if cash then
+		cash.Value += amount
+	end
+end
+
+local function sellInventory(player)
+	-- Ganti sesuai sistem inventory-mu
+	local inv = player:FindFirstChild("Inventory")
+	if not inv then return end
+	local total = 0
+	for _, item in ipairs(inv:GetChildren()) do
+		total += item:GetAttribute("Price") or 0
+		item:Destroy()
+	end
+	if total > 0 then
+		addCash(player, total)
+	end
+end
+
+local function claimRewards(player)
+	-- Ganti sesuai sistem reward kereta-mu
+	local pending = player:GetAttribute("PendingTrainReward") or 0
+	if pending > 0 then
+		addCash(player, pending)
+		player:SetAttribute("PendingTrainReward", 0)
+	end
+end
+
+while true do
+	task.wait(INTERVAL)
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player:GetAttribute("AutoCollect") then
+			addCash(player, CASH_PER_TICK)
+		end
+		if player:GetAttribute("AutoSell") then
+			sellInventory(player)
+		end
+		if player:GetAttribute("AutoClaim") then
+			claimRewards(player)
+		end
+	end
+end
